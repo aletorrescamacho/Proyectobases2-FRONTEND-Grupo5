@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Form } from '@/components/Form'
 import { useAuthFetch } from '@/hooks/useAuthFetch'
 import { useLoading } from '@/hooks/useLoading'
+import Navbar from './navigation/navbar'
 
 export default function LoginPage () {
   const { finishLoading, isLoading, startLoading } = useLoading()
@@ -20,6 +22,7 @@ export default function LoginPage () {
 
   return (
     <>
+      <Navbar/>
       <Form
         title='Inicia Sesión'
         onSubmit={login}
