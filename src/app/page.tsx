@@ -1,37 +1,49 @@
 'use client'
 
 import { Form, FormValues } from '@/components/Form'
-import { useAuthFetch } from '@/hooks/useAuthFetch'
 import { useLoading } from '@/hooks/useLoading'
 
-export default function LoginPage () {
+export default function LoginPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
-  const authFetch = useAuthFetch()
 
   const login = async (formData: any) => {
-    startLoading();
-
+    startLoading()
     try {
-      await authFetch({
-        endpoint: 'users/login', // Cambia esto al endpoint correcto de tu backend
-        formData,
-        redirectRoute: '/home', // Ruta a la que quieres redirigir después de un registro exitoso
-      });
+      const response = await fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error en la solicitud de inicio de sesión')
+      }
+
+      const data = await response.json()
+
+      // Guarda el userId en localStorage si la respuesta contiene los datos esperados
+      if (data.user?.userId) {
+        localStorage.setItem('userId', data.user.userId.low.toString()); // Almacena solo el valor de `low` como cadena 
+      }
+
+      // Redirige a /home si el inicio de sesión es exitoso
+      window.location.href = '/home'
     } catch (error) {
-      console.error('Error en el Inicio de Sesion', error);
+      console.error('Error en el Inicio de Sesión', error)
     } finally {
-      finishLoading();
+      finishLoading()
     }
-  };
+  }
 
   const handleSubmit = (values: FormValues) => {
     const formData = {
       email: values.email,
       password: values.password,
-    };
-  
-    login(formData);
-  };
+    }
+    login(formData)
+  }
 
   return (
     <>
@@ -68,3 +80,5 @@ export default function LoginPage () {
     </>
   )
 }
+
+  

@@ -1,28 +1,40 @@
 'use client'
-
 import { Form, FormValues } from '@/components/Form'
-import { useAuthFetch } from '@/hooks/useAuthFetch'
 import { useLoading } from '@/hooks/useLoading'
 
-export default function RegisterPage () {
+export default function RegisterPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
-  const authFetch = useAuthFetch()
 
   const register = async (formData: any) => {
-    startLoading();
-
+    startLoading()
     try {
-      await authFetch({
-        endpoint: 'users/register', // Cambia esto al endpoint correcto de tu backend
-        formData,
-        redirectRoute: '/home', // Ruta a la que quieres redirigir después de un registro exitoso
-      });
+      const response = await fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error en la solicitud de registro')
+      }
+
+      const data = await response.json()
+
+      // Guarda el userId en localStorage si la respuesta contiene los datos esperados
+      if (data.user?.userId) {
+        localStorage.setItem('userId', data.user.userId.low.toString()); // Almacena solo el valor de `low` como cadena // Convierte el objeto en una cadena JSON
+      }
+
+      // Redirige a /home si el registro es exitoso
+      window.location.href = '/home'
     } catch (error) {
-      console.error('Error en el registro:', error);
+      console.error('Error en el registro:', error)
     } finally {
-      finishLoading();
+      finishLoading()
     }
-  };
+  }
 
   const handleSubmit = (values: FormValues) => {
     const formData = {
@@ -33,10 +45,9 @@ export default function RegisterPage () {
       gender: values.gender,
       date_of_birth: values.date_of_birth,
       password: values.password,
-    };
-  
-    register(formData);
-  };
+    }
+    register(formData)
+  }
   
 
   return (
