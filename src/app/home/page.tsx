@@ -1,69 +1,77 @@
-import { dateTransform } from '@/utils/dateTransform'
+"use client"
+import { useEffect, useState } from 'react';
+import { useAuthFetch, AuthFetchResponse } from '@/hooks/useAuthFetch';
 
-async function getData () {
-  const res = await fetch('http://localhost:3000')//Pagina siguiente
+export default function HomePage() {
+  const [genreRecommendations, setGenreRecommendations] = useState<AuthFetchResponse[]>([]);
+  const [secondGenreRecommendations, setSecondGenreRecommendations] = useState<AuthFetchResponse[]>([]);
+  const [artistRecommendations, setArtistRecommendations] = useState<AuthFetchResponse[]>([]);
+  const [artistsBySongsRecommendations, setArtistsBySongsRecommendations] = useState<AuthFetchResponse[]>([]);
+  
+  const authFetch = useAuthFetch();
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
+  useEffect(() => {
+    // Obtener recomendaciones por género
+    authFetch({ endpoint: 'recommender/recommend-by-genre' })
+      .then(data => setGenreRecommendations(data))
+      .catch(console.error);
 
-  return res.json()
-}
+    // Obtener recomendaciones por segundo género
+    authFetch({ endpoint: 'recommender/recommend-by-second-genre' })
+      .then(data => setSecondGenreRecommendations(data))
+      .catch(console.error);
 
-export default async function HomePage () {
-  const { users } = await getData()
+    // Obtener recomendaciones por artista
+    authFetch({ endpoint: 'recommender/recommend-by-artist' })
+      .then(data => setArtistRecommendations(data))
+      .catch(console.error);
+
+    // Obtener recomendaciones de artistas por canciones escuchadas
+    authFetch({ endpoint: 'recommender/recommend-artists-by-songs' })
+      .then(data => setArtistsBySongsRecommendations(data))
+      .catch(console.error);
+  }, []);
 
   return (
     <main>
-      <table className='text-left border m-[1rem] text-sm font-light'>
-        <thead className='border-b bg-white font-medium dark:border-neutral-500 dark:bg-neutral-600'>
-          <tr className='border-b text-center'>
-            <th scope='col' className='px-6 py-4'>
-              Tabla de Usuarios
-            </th>
-          </tr>
+      <h1>Recomendaciones</h1>
 
-          <tr>
-            <th scope='col' className='px-6 py-4'>
-              #
-            </th>
-            <th scope='col' className='px-6 py-4'>
-              Id
-            </th>
-            <th scope='col' className='px-6 py-4'>
-              Email
-            </th>
-            <th scope='col' className='px-6 py-4'>
-              Creado
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {users?.map((user: any, index: number) => {
-            const isEven = index % 2 === 0
+      <section>
+        <h2>Canciones Recomendadas por Género</h2>
+        <ul>
+          {genreRecommendations.map((song, index) => (
+            <li key={index}>{song.trackName}</li>
+          ))}
+        </ul>
+      </section>
 
-            const bg = isEven
-              ? 'bg-white dark:bg-neutral-600'
-              : 'bg-neutral-100 dark:bg-neutral-700'
+      <section>
+        <h2>Canciones Recomendadas por Segundo Género</h2>
+        <ul>
+          {secondGenreRecommendations.map((song, index) => (
+            <li key={index}>{song.trackName}</li>
+          ))}
+        </ul>
+      </section>
 
-            return (
-              <tr
-                key={user._id}
-                className={`${bg} border-b font-medium dark:border-neutral-500`}
-              >
-                <td className='whitespace-nowrap px-6 py-4 font-medium'>
-                  {index + 1}
-                </td>
-                <td className='whitespace-nowrap px-6 py-4'>{user._id}</td>
-                <td className='whitespace-nowrap px-6 py-4'>{user.email}</td>
-                <td className='whitespace-nowrap px-6 py-4'>
-                  {dateTransform(user.createdAt)}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <section>
+        <h2>Canciones Recomendadas por Artista</h2>
+        <ul>
+          {artistRecommendations.map((song, index) => (
+            <li key={index}>{song.trackName}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Artistas Recomendados</h2>
+        <ul>
+          {artistsBySongsRecommendations.map((artist, index) => (
+            <li key={index}>{artist.artistName}</li>
+          ))}
+        </ul>
+      </section>
     </main>
-  )
+  );
 }
+
