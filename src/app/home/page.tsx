@@ -1,36 +1,86 @@
-"use client"
+'use client'
 import { useEffect, useState } from 'react';
-import { useAuthFetch, AuthFetchResponse } from '@/hooks/useAuthFetch';
 
 export default function HomePage() {
-  const [genreRecommendations, setGenreRecommendations] = useState<AuthFetchResponse[]>([]);
-  const [secondGenreRecommendations, setSecondGenreRecommendations] = useState<AuthFetchResponse[]>([]);
-  const [artistRecommendations, setArtistRecommendations] = useState<AuthFetchResponse[]>([]);
-  const [artistsBySongsRecommendations, setArtistsBySongsRecommendations] = useState<AuthFetchResponse[]>([]);
-  
-  const authFetch = useAuthFetch();
+  const [genreRecommendations, setGenreRecommendations] = useState<any>(null);
+  const [secondGenreRecommendations, setSecondGenreRecommendations] = useState<any>(null);
+  const [artistRecommendations, setArtistRecommendations] = useState<any>(null);
+  const [artistsBySongsRecommendations, setArtistsBySongsRecommendations] = useState<any>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Obtener recomendaciones por género
-    authFetch({ endpoint: 'recommender/recommend-by-genre' })
-      .then(data => setGenreRecommendations(data))
-      .catch(console.error);
-
-    // Obtener recomendaciones por segundo género
-    authFetch({ endpoint: 'recommender/recommend-by-second-genre' })
-      .then(data => setSecondGenreRecommendations(data))
-      .catch(console.error);
-
-    // Obtener recomendaciones por artista
-    authFetch({ endpoint: 'recommender/recommend-by-artist' })
-      .then(data => setArtistRecommendations(data))
-      .catch(console.error);
-
-    // Obtener recomendaciones de artistas por canciones escuchadas
-    authFetch({ endpoint: 'recommender/recommend-artists-by-songs' })
-      .then(data => setArtistsBySongsRecommendations(data))
-      .catch(console.error);
+    // Verifica si `window` está definido para asegurarte de que estás en el cliente
+    if (typeof window !== 'undefined') {
+      const storedUserId = localStorage.getItem('userId');
+      setUserId(storedUserId);
+    }
   }, []);
+
+  useEffect(() => {
+    // Recomendaciones por género
+    fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-by-genre`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    })
+      .then(response => response.json())
+      .then(data => setGenreRecommendations(data))
+      .catch(error => console.error('Error en datos de género', error));
+
+    // Recomendaciones por segundo género
+    fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-by-second-genre`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    })
+      .then(response => response.json())
+      .then(data => setSecondGenreRecommendations(data))
+      .catch(error => console.error('Error en datos de segundo género', error));
+
+    // Recomendaciones por artista
+    fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-by-artist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    })
+      .then(response => response.json())
+      .then(data => setArtistRecommendations(data))
+      .catch(error => console.error('Error en datos de artista', error));
+
+    // Recomendaciones de artistas por canciones escuchadas
+    fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-artists-by-songs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    })
+      .then(response => response.json())
+      .then(data => setArtistsBySongsRecommendations(data))
+      .catch(error => console.error('Error en datos de artistas por canciones escuchadas', error));
+  }, [userId]);
+
+  const renderData = (data: any) => {
+    if (!data) return <p>No hay datos disponibles</p>;
+
+    if (Array.isArray(data)) {
+      return (
+        <ul>
+          {data.map((item, index) => (
+            <li key={index}>{JSON.stringify(item)}</li>
+          ))}
+        </ul>
+      );
+    } else {
+      return <p>{JSON.stringify(data)}</p>;
+    }
+  };
 
   return (
     <main>
@@ -38,40 +88,23 @@ export default function HomePage() {
 
       <section>
         <h2>Canciones Recomendadas por Género</h2>
-        <ul>
-          {genreRecommendations.map((song, index) => (
-            <li key={index}>{song.trackName}</li>
-          ))}
-        </ul>
+        {renderData(genreRecommendations)}
       </section>
 
       <section>
         <h2>Canciones Recomendadas por Segundo Género</h2>
-        <ul>
-          {secondGenreRecommendations.map((song, index) => (
-            <li key={index}>{song.trackName}</li>
-          ))}
-        </ul>
+        {renderData(secondGenreRecommendations)}
       </section>
 
       <section>
         <h2>Canciones Recomendadas por Artista</h2>
-        <ul>
-          {artistRecommendations.map((song, index) => (
-            <li key={index}>{song.trackName}</li>
-          ))}
-        </ul>
+        {renderData(artistRecommendations)}
       </section>
 
       <section>
-        <h2>Artistas Recomendados</h2>
-        <ul>
-          {artistsBySongsRecommendations.map((artist, index) => (
-            <li key={index}>{artist.artistName}</li>
-          ))}
-        </ul>
+        <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
+        {renderData(artistsBySongsRecommendations)}
       </section>
     </main>
   );
 }
-
