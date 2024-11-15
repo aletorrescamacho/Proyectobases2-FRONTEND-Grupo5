@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { useRouter } from 'next/navigation';
 import { NotificationContext } from '@/context/NotificationContext';
 
+
 interface AuthFetchProps {
   endpoint: string;
   redirectRoute?: string;
