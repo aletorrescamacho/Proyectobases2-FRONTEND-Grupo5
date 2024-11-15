@@ -5,8 +5,9 @@ import { Form } from '@/components/Form'
 import { useAuthFetch } from '@/hooks/useAuthFetch'
 import { useLoading } from '@/hooks/useLoading'
 import Navbar from './navigation/navbar'
+import Footer from './footer/footer'
 
-export default function LoginPage () {
+export default function LoginPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
   const authFetch = useAuthFetch()
 
@@ -21,38 +22,41 @@ export default function LoginPage () {
   }
 
   return (
-    <>
-      <Navbar/>
-      <Form
-        title='Inicia Sesión'
-        onSubmit={login}
-        description='Formulario para iniciar sesión'
-      >
-        <div className='my-[10px] flex flex-col gap-4'>
-          <Form.Input
-            label='Correo'
-            name='email'
-            placeholder='Ingresa tu correo...'
+    <div className="min-h-screen w-full bg-[#E6F7FF] flex flex-col justify-between">
+      <Navbar />
+      <div className="flex-grow flex items-center justify-center w-full">
+        <Form
+          title='Inicia Sesión'
+          onSubmit={login}
+          description='Formulario para iniciar sesión'
+        >
+          <div className='my-[10px] flex flex-col gap-4'>
+            <Form.Input
+              label='Correo'
+              name='email'
+              placeholder='Ingresa tu correo...'
+            />
+            <Form.Input
+              placeholder='Ingresa tu contraseña...'
+              label='Contraseña'
+              name='password'
+              type='password'
+            />
+          </div>
+          <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
+          <Form.Footer
+            description='Te olvidate tu contraseña?'
+            link='/forget-password'
+            textLink='Recuperar contraseña'
           />
-          <Form.Input
-            placeholder='Ingresa tu contraseña...'
-            label='Contraseña'
-            name='password'
-            type='password'
+          <Form.Footer
+            description='Aun no tienes cuenta?'
+            link='/register'
+            textLink='Registrate'
           />
-        </div>
-        <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
-        <Form.Footer
-          description='Te olvidate tu contraseña?'
-          link='/forget-password'
-          textLink='Recuperar contraseña'
-        />
-        <Form.Footer
-          description='Aun no tienes cuenta?'
-          link='/register'
-          textLink='Registrate'
-        />
-      </Form>
-    </>
+        </Form>
+      </div>
+      <Footer />
+    </div>
   )
 }
