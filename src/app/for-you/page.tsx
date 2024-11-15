@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 interface SongResult {
   trackName: string;
@@ -16,6 +16,14 @@ export default function ForYouPage() {
   const [searchType, setSearchType] = useState('Canción');
   const [displayType, setDisplayType] = useState('Canción');
   const [results, setResults] = useState<SongResult[] | ArtistResult[] | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUserId = localStorage.getItem('userId');
+      setUserId(storedUserId);
+    }
+  }, []);
 
   const handleSearch = async () => {
     const endpoint = searchType === 'Canción' ? 'search/search-song' : 'search/search-artist';
