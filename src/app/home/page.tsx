@@ -9,7 +9,6 @@ export default function HomePage() {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Verifica si `window` está definido para asegurarte de que estás en el cliente
     if (typeof window !== 'undefined') {
       const storedUserId = localStorage.getItem('userId');
       setUserId(storedUserId);
@@ -17,48 +16,36 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    // Recomendaciones por género
     fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-by-genre`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId }),
     })
       .then(response => response.json())
       .then(data => setGenreRecommendations(data))
       .catch(error => console.error('Error en datos de género', error));
 
-    // Recomendaciones por segundo género
     fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-by-second-genre`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId }),
     })
       .then(response => response.json())
       .then(data => setSecondGenreRecommendations(data))
       .catch(error => console.error('Error en datos de segundo género', error));
 
-    // Recomendaciones por artista
     fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-by-artist`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId }),
     })
       .then(response => response.json())
       .then(data => setArtistRecommendations(data))
       .catch(error => console.error('Error en datos de artista', error));
 
-    // Recomendaciones de artistas por canciones escuchadas
     fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/recommender/recommend-artists-by-songs`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId }),
     })
       .then(response => response.json())
@@ -66,20 +53,105 @@ export default function HomePage() {
       .catch(error => console.error('Error en datos de artistas por canciones escuchadas', error));
   }, [userId]);
 
-  const renderData = (data: any) => {
+  const renderData = (data: any, type: string) => {
     if (!data) return <p>No hay datos disponibles</p>;
 
     if (Array.isArray(data)) {
-      return (
-        <ul>
-          {data.map((item, index) => (
-            <li key={index}>{JSON.stringify(item)}</li>
-          ))}
-        </ul>
-      );
+      if (type === "artist") {
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+            {data.map((item, index) => (
+              <ArtistCard key={index} artistName={item.artists} />
+            ))}
+          </div>
+        );
+      } else {
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+            {data.map((item, index) => (
+              <SongCard key={index} title={item.track_name} />
+            ))}
+          </div>
+        );
+      }
     } else {
       return <p>{JSON.stringify(data)}</p>;
     }
+  };
+
+  const SongCard = ({ title }: { title: string }) => {
+    const [liked, setLiked] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    return (
+      <div style={{
+        border: '1px solid #ccc',
+        padding: '1rem',
+        borderRadius: '8px',
+        width: '200px',
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center'
+      }}>
+        <p><strong>{title}</strong></p>
+        <button 
+          onClick={() => setLiked(!liked)} 
+          style={{
+            backgroundColor: 'transparent',
+            border: 'none',
+            fontSize: '1.5rem',
+            color: liked ? 'black' : 'gray',
+            cursor: 'pointer'
+          }}>
+          ♥
+        </button>
+        <button 
+          onClick={() => setIsPlaying(!isPlaying)} 
+          style={{
+            backgroundColor: '#f0f0f0',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            padding: '0.5rem 1rem',
+            cursor: 'pointer'
+          }}>
+          {isPlaying ? 'Pause' : 'Play'}
+        </button>
+      </div>
+    );
+  };
+
+  const ArtistCard = ({ artistName }: { artistName: string }) => {
+    const [following, setFollowing] = useState(false);
+
+    return (
+      <div style={{
+        border: '1px solid #ccc',
+        padding: '1rem',
+        borderRadius: '8px',
+        width: '200px',
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center'
+      }}>
+        <p><strong>{artistName}</strong></p>
+        <button 
+          onClick={() => setFollowing(!following)} 
+          style={{
+            backgroundColor: following ? '#4CAF50' : '#f0f0f0',
+            color: following ? 'white' : 'black',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            padding: '0.5rem 1rem',
+            cursor: 'pointer'
+          }}>
+          {following ? 'Seguido' : 'Seguir'}
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -88,23 +160,25 @@ export default function HomePage() {
 
       <section>
         <h2>Canciones Recomendadas por Género</h2>
-        {renderData(genreRecommendations)}
+        {renderData(genreRecommendations, "songs")}
       </section>
 
       <section>
         <h2>Canciones Recomendadas por Segundo Género</h2>
-        {renderData(secondGenreRecommendations)}
+        {renderData(secondGenreRecommendations, "songs")}
       </section>
 
       <section>
         <h2>Canciones Recomendadas por Artista</h2>
-        {renderData(artistRecommendations)}
+        {renderData(artistRecommendations, "songs")}
       </section>
 
       <section>
         <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
-        {renderData(artistsBySongsRecommendations)}
+        {renderData(artistsBySongsRecommendations, "artist")}
       </section>
     </main>
   );
 }
+
+
