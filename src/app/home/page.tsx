@@ -7,6 +7,8 @@ export default function HomePage() {
   const [artistRecommendations, setArtistRecommendations] = useState<any>(null);
   const [artistsBySongsRecommendations, setArtistsBySongsRecommendations] = useState<any>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [liked, setLiked] = useState(false);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -62,6 +64,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
             {data.map((item, index) => (
               <ArtistCard key={index} artistName={item.artists} />
+
             ))}
           </div>
         );
@@ -69,7 +72,8 @@ export default function HomePage() {
         return (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
             {data.map((item, index) => (
-              <SongCard key={index} title={item.track_name} />
+              <SongCard key={index} title={item.track_name} track_id={item.track_id} />
+
             ))}
           </div>
         );
@@ -79,10 +83,9 @@ export default function HomePage() {
     }
   };
 
-  const SongCard = ({ title }: { title: string }) => {
-    const [liked, setLiked] = useState(false);
+  const SongCard = ({ title, track_id }: { title: string, track_id: string }, ) => {
     const [isPlaying, setIsPlaying] = useState(false);
-
+    
     return (
       <div style={{
         border: '1px solid #ccc',
@@ -108,7 +111,9 @@ export default function HomePage() {
           ♥
         </button>
         <button 
-          onClick={() => setIsPlaying(!isPlaying)} 
+          onClick={() => {setIsPlaying(!isPlaying);
+            registrarEscucha(track_id);
+          }} 
           style={{
             backgroundColor: '#f0f0f0',
             border: '1px solid #ccc',
@@ -121,6 +126,29 @@ export default function HomePage() {
       </div>
     );
   };
+
+  function registrarEscucha(trackId: string) {
+    console.log(trackId);
+    console.log(userId)
+    fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/listen-to-song', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({trackId, userId }),
+    })
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        console.log('Relación ESCUCHO registrada exitosamente');
+      } else {
+        console.error('Error al registrar la relación ESCUCHO');
+      }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+  }
+  
+  
 
   const ArtistCard = ({ artistName }: { artistName: string }) => {
     const [following, setFollowing] = useState(false);
