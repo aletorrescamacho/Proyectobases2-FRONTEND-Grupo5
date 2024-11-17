@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
   const [genreRecommendations, setGenreRecommendations] = useState<any>(null);
@@ -7,6 +8,7 @@ export default function HomePage() {
   const [artistRecommendations, setArtistRecommendations] = useState<any>(null);
   const [artistsBySongsRecommendations, setArtistsBySongsRecommendations] = useState<any>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
 
 
   useEffect(() => {
@@ -297,6 +299,23 @@ export default function HomePage() {
         <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
         {renderData(artistsBySongsRecommendations, "artist")}
       </section>
+      
+      <button 
+        onClick={() => router.push('/for-you')} // Usar router.push para redirigir a /for-you
+        style={{
+          marginTop: '2rem',
+          backgroundColor: '#0070f3',
+          color: 'white',
+          padding: '0.75rem 1.5rem',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '1rem'
+        }}
+      >
+        For You
+      </button>
+      
     </main>
   );
 }
