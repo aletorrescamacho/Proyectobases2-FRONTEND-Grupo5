@@ -21,7 +21,7 @@ export default function Sidebar() {
         <SidebarButton title="Trending" to="/foryou/trending" icon={<FaGripfire/>}/>
         <SidebarButton title="Player" to="/foryou/player" icon={<FaPlay/>}/>
         <SidebarButton title="Favorites" to="/foryou/favorites" icon={<MdFavorite/>}/>
-        <SidebarButton title="Library" to="/foryou/library" icon={<IoLibrary/>}/>
+        <SidebarButton title="Library" to="/foryou" icon={<IoLibrary/>}/>
       </div>
       <SidebarButton title="Sign Out" to="/" icon={<FaSignOutAlt/>}/>
     </div>
