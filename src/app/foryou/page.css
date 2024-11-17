@@ -4,7 +4,10 @@
     background-color: #E99D72;
     border-radius: 30px;
     display: flex;
+    flex-direction: row; /* Organiza los elementos en fila */
+    gap: 20px; /* Es*/
 }
+
 
 
 /*body{
