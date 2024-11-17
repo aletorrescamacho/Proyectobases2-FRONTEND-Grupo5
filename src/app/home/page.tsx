@@ -7,7 +7,6 @@ export default function HomePage() {
   const [artistRecommendations, setArtistRecommendations] = useState<any>(null);
   const [artistsBySongsRecommendations, setArtistsBySongsRecommendations] = useState<any>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [liked, setLiked] = useState(false);
 
 
   useEffect(() => {
@@ -62,10 +61,12 @@ export default function HomePage() {
       if (type === "artist") {
         return (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-            {data.map((item, index) => (
-              <ArtistCard key={index} artistName={item.artists} />
-
-            ))}
+            {data.map((item, index) => {
+              const artistId = item.artist_id?.low ?? item.artist_id; // Usa low si es un objeto
+              return(
+              <ArtistCard key={index} artistName={item.artists} artist_id={artistId} />
+            )
+        })}
           </div>
         );
       } else {
@@ -85,6 +86,7 @@ export default function HomePage() {
 
   const SongCard = ({ title, track_id }: { title: string, track_id: string }, ) => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [liked, setLiked] = useState(false);
     
     return (
       <div style={{
@@ -100,7 +102,10 @@ export default function HomePage() {
       }}>
         <p><strong>{title}</strong></p>
         <button 
-          onClick={() => setLiked(!liked)} 
+          onClick={() => {setLiked(!liked);
+            console.log(liked);
+            handleFavorito(track_id, liked);
+          } }
           style={{
             backgroundColor: 'transparent',
             border: 'none',
@@ -148,9 +153,52 @@ export default function HomePage() {
     .catch(error => console.error('Error en la solicitud:', error));
   }
   
+
+  function handleFavorito(trackId: string, like: boolean) {
+    console.log(trackId);
+    console.log(userId);
+    console.log(like);
+    if (like == false){
+    fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/add-to-favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({trackId, userId }),
+    })
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        console.log('Relación TIENE EN FAVORITOS registrada exitosamente');
+      } else {
+        console.error('Error al registrar la relación TIENE EN FAVORITOS');
+      }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+    }
+    else{
+      fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/quit-from-favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({trackId, userId }),
+      })
+      .then(response => {
+        console.log(response)
+        if (response.ok) {
+          console.log('Relación TIENE EN FAVORITOS DESTRUIDA exitosamente');
+        } else {
+          console.error('Error al DESTRUIR la relación TIENE EN FAVORITOS');
+        }
+      })
+      .catch(error => console.error('Error en la solicitud:', error));
+      }
+    }
+    
   
 
-  const ArtistCard = ({ artistName }: { artistName: string }) => {
+  const ArtistCard = ({ artistName, artist_id }: { artistName: string , artist_id: number}) => {
     const [following, setFollowing] = useState(false);
 
     return (
@@ -167,7 +215,9 @@ export default function HomePage() {
       }}>
         <p><strong>{artistName}</strong></p>
         <button 
-          onClick={() => setFollowing(!following)} 
+          onClick={() => {setFollowing(!following)
+            handleArtist(artist_id, following);
+          }} 
           style={{
             backgroundColor: following ? '#4CAF50' : '#f0f0f0',
             color: following ? 'white' : 'black',
@@ -181,6 +231,48 @@ export default function HomePage() {
       </div>
     );
   };
+
+  function handleArtist(artistId: number, follow: boolean) {
+    console.log(artistId);
+    console.log(userId);
+    console.log(follow);
+    if (follow == false){
+    fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/follow-artist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({artistId, userId }),
+    })
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        console.log('Relación SIGUE A registrada exitosamente');
+      } else {
+        console.error('Error al registrar la relación SIGUE A');
+      }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+    }
+    else{
+      fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/stop-following-artist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({artistId, userId }),
+      })
+      .then(response => {
+        console.log(response)
+        if (response.ok) {
+          console.log('Relación SIGUE A DESTRUIDA exitosamente');
+        } else {
+          console.error('Error al DESTRUIR la relación SIGUE A');
+        }
+      })
+      .catch(error => console.error('Error en la solicitud:', error));
+      }
+    }
 
   return (
     <main>
