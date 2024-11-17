@@ -1,6 +1,7 @@
 'use client';
 import { useState,useEffect } from 'react';
 
+
 interface SongResult {
   trackName: string;
   artistName: string;
