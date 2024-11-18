@@ -6,10 +6,12 @@ interface SongResult {
   trackName: string;
   artistName: string;
   genreName: string;
+  trackId: string;
 }
 
 interface ArtistResult {
   artists: string;
+  artist_id: any;
 }
 
 export default function ForYouPage() {
@@ -53,9 +55,34 @@ export default function ForYouPage() {
   };
 
   // Definición del componente SongCard
-  const SongCard = ({ trackName, artistName, genreName }: { trackName: string; artistName: string; genreName: string }) => {
+  const SongCard = ({ trackName, artistName, genreName, trackId}: { trackName: string; artistName: string; genreName: string; trackId: string }) => {
     const [liked, setLiked] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    useEffect(() => {
+      // Verifica si la canción está en favoritos al cargar el componente
+      const checkFavoriteStatus = async () => {
+        try {
+          const response = await fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/search/check-favorite`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, trackName }),
+          });
+
+
+          const data = await response.json();
+          setLiked(data); // `data` es `true` si la relación existe, `false` si no
+
+          
+        } catch (error) {
+          console.error("Error checking favorite status:", error);
+        }
+      };
+
+      if (userId) {
+        checkFavoriteStatus();
+      }
+    }, [trackName, userId]);
 
     return (
       <div style={{
@@ -74,7 +101,10 @@ export default function ForYouPage() {
         <p><strong>Artista:</strong> {artistName}</p>
         <p><strong>Género:</strong> {genreName}</p>
         <button
-          onClick={() => setLiked(!liked)}
+          onClick={() => {setLiked(!liked);
+            handleFavorito(trackId, liked)
+          }
+          }
           style={{
             backgroundColor: 'transparent',
             border: 'none',
@@ -86,7 +116,9 @@ export default function ForYouPage() {
           ♥
         </button>
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => {setIsPlaying(!isPlaying);
+            registrarEscucha(trackId);
+          }}
           style={{
             backgroundColor: '#f0f0f0',
             border: '1px solid #ccc',
@@ -101,9 +133,99 @@ export default function ForYouPage() {
     );
   };
 
+  function registrarEscucha(trackId: string) {
+    console.log(trackId);
+    console.log(userId)
+    fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/listen-to-song', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({trackId, userId }),
+    })
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        console.log('Relación ESCUCHO registrada exitosamente');
+      } else {
+        console.error('Error al registrar la relación ESCUCHO');
+      }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+  }
+
+  function handleFavorito(trackId: string, like: boolean) {
+    console.log(trackId);
+    console.log(userId);
+    console.log(like);
+    if (like == false){
+    fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/add-to-favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({trackId, userId }),
+    })
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        console.log('Relación TIENE EN FAVORITOS registrada exitosamente');
+      } else {
+        console.error('Error al registrar la relación TIENE EN FAVORITOS');
+      }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+    }
+    else{
+      fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/quit-from-favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({trackId, userId }),
+      })
+      .then(response => {
+        console.log(response)
+        if (response.ok) {
+          console.log('Relación TIENE EN FAVORITOS DESTRUIDA exitosamente');
+        } else {
+          console.error('Error al DESTRUIR la relación TIENE EN FAVORITOS');
+        }
+      })
+      .catch(error => console.error('Error en la solicitud:', error));
+      }
+    }
+
+
+
   // Definición del componente ArtistCard
-  const ArtistCard = ({ artistName }: { artistName: string }) => {
+  const ArtistCard = ({ artistName, artistId}: { artistName: string, artistId: any }) => {
     const [following, setFollowing] = useState(false);
+
+    useEffect(() => {
+      // Verifica si sigue al artista
+      const checkFollowStatus = async () => {
+        try {
+          const response = await fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/search/check-follow`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, artistId }),
+          });
+
+
+          const data = await response.json();
+          setFollowing(data); // `data` es `true` si la relación existe, `false` si no
+
+          
+        } catch (error) {
+          console.error("Error checking favorite status:", error);
+        }
+      };
+
+      if (userId) {
+        checkFollowStatus();
+      }
+    }, [artistName, userId]);
 
     return (
       <div style={{
@@ -120,7 +242,10 @@ export default function ForYouPage() {
       }}>
         <p><strong>Artista:</strong> {artistName}</p>
         <button
-          onClick={() => setFollowing(!following)}
+          onClick={() => {setFollowing(!following);
+            handleArtist(artistId, following);
+          }
+        }
           style={{
             backgroundColor: following ? '#4CAF50' : '#f0f0f0',
             color: following ? 'white' : 'black',
@@ -135,6 +260,49 @@ export default function ForYouPage() {
       </div>
     );
   };
+
+  function handleArtist(artistId: any, follow: boolean) {
+    artistId= artistId?.low ?? artistId
+    console.log(artistId);
+    console.log(userId);
+    console.log(follow);
+    if (follow == false){
+    fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/follow-artist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({artistId, userId }),
+    })
+    .then(response => {
+      console.log(response)
+      if (response.ok) {
+        console.log('Relación SIGUE A registrada exitosamente');
+      } else {
+        console.error('Error al registrar la relación SIGUE A');
+      }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+    }
+    else{
+      fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/stop-following-artist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({artistId, userId }),
+      })
+      .then(response => {
+        console.log(response)
+        if (response.ok) {
+          console.log('Relación SIGUE A DESTRUIDA exitosamente');
+        } else {
+          console.error('Error al DESTRUIR la relación SIGUE A');
+        }
+      })
+      .catch(error => console.error('Error en la solicitud:', error));
+      }
+    }
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
@@ -197,6 +365,7 @@ export default function ForYouPage() {
                 trackName={item.trackName}
                 artistName={item.artistName}
                 genreName={item.genreName}
+                trackId={item.trackId}
               />
             ))
           ) : (
@@ -204,6 +373,7 @@ export default function ForYouPage() {
               <ArtistCard
                 key={index}
                 artistName={item.artists} // Usa "artists" para el nombre del artista
+                artistId={item.artist_id?.low ?? item.artist_id}
               />
             ))
           )}
