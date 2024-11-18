@@ -204,6 +204,7 @@ export default function ForYouPage() {
 
     useEffect(() => {
       // Verifica si sigue al artista
+      console.log(artistId);
       const checkFollowStatus = async () => {
         try {
           const response = await fetch(`https://proyectobases2-backend-grupo5-production.up.railway.app/search/check-follow`, {
