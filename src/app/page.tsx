@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { Form, FormValues } from '@/components/Form'
 import { useLoading } from '@/hooks/useLoading'
+import Navbar from './navigation/navbar'
+import Footer from './footer/footer'
 
 export default function LoginPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
@@ -58,11 +61,10 @@ export default function LoginPage() {
             name='email'
             placeholder='Ingresa tu correo...'
           />
-          <Form.Input
-            placeholder='Ingresa tu contraseña...'
-            label='Contraseña'
-            name='password'
-            type='password'
+          <Form.Footer
+            description='Aun no tienes cuenta?'
+            link='/register'
+            textLink='Registrate'
           />
         </div>
         <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
