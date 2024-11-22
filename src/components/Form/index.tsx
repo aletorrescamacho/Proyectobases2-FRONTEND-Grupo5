@@ -4,7 +4,7 @@ import { Footer, Input, SubmitButton } from '@/components/Form/components'
 import { createContext, useState } from 'react'
 import styles from './styles.module.scss'
 
-type FormValues = Record<string, string>
+export type FormValues = Record<string, string>
 
 interface FormContextType {
   formValues: FormValues
