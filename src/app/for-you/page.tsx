@@ -1,5 +1,7 @@
 'use client';
+import Sidebar from '@/components/sidebar';
 import { useState,useEffect } from 'react';
+import Footer from '../footer/footer';
 
 
 interface SongResult {
@@ -306,80 +308,92 @@ export default function ForYouPage() {
     }
 
   return (
-    <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-        <input
-          type="text"
-          placeholder="Busca aquí..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            outline: 'none',
-            backgroundColor: '#f0f0f0',
-            width: '200px',
-          }}
-        />
-
-        <select
-          value={searchType}
-          onChange={(e) => setSearchType(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor: '#f0f0f0',
-          }}
-        >
-          <option value="Canción">Canción</option>
-          <option value="Artista">Artista</option>
-        </select>
-
-        <button
-          onClick={handleSearch}
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '1.5rem',
-            color: 'black',
-          }}
-        >
-          🔍
-        </button>
-      </div>
-
-      {results && (
-        <div style={{
-          marginTop: '1rem',
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '1rem',
-        }}>
-          {displayType === 'Canción' ? (
-            (results as SongResult[]).map((item: SongResult, index: number) => (
-              <SongCard
-                key={index}
-                trackName={item.trackName}
-                artistName={item.artistName}
-                genreName={item.genreName}
-                trackId={item.trackId}
+    <main >
+      <div className='main-body'>
+        <Sidebar/>
+        <div className='screen-container' >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+              <h1>
+                Busca la canción que desees
+              </h1>
+              <input
+                type="text"
+                placeholder="Busca aquí..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  padding: '0.5rem',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  outline: 'none',
+                  backgroundColor: '#f0f0f0',
+                  width: '200px',
+                }}
               />
-            ))
-          ) : (
-            (results as ArtistResult[]).map((item: ArtistResult, index: number) => (
-              <ArtistCard
-                key={index}
-                artistName={item.artists} // Usa "artists" para el nombre del artista
-                artistId={item.artist_id?.low ?? item.artist_id}
-              />
-            ))
-          )}
+
+              <select
+                value={searchType}
+                onChange={(e) => setSearchType(e.target.value)}
+                style={{
+                  padding: '0.5rem',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  backgroundColor: '#f0f0f0',
+                }}
+              >
+                <option value="Canción">Canción</option>
+                <option value="Artista">Artista</option>
+              </select>
+
+              <button
+                onClick={handleSearch}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1.5rem',
+                  color: 'black',
+                }}
+              >
+                🔍
+              </button>
+            </div>
+
+            {results && (
+              <div style={{
+                marginTop: '1rem',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: '1rem',
+              }}>
+                {displayType === 'Canción' ? (
+                  (results as SongResult[]).map((item: SongResult, index: number) => (
+                    <SongCard
+                      key={index}
+                      trackName={item.trackName}
+                      artistName={item.artistName}
+                      genreName={item.genreName}
+                      trackId={item.trackId}
+                    />
+                  ))
+                ) : (
+                  (results as ArtistResult[]).map((item: ArtistResult, index: number) => (
+                    <ArtistCard
+                      key={index}
+                      artistName={item.artists} // Usa "artists" para el nombre del artista
+                      artistId={item.artist_id?.low ?? item.artist_id}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      )}
+
+      </div>
+      <Footer/>
     </main>
   );
 }

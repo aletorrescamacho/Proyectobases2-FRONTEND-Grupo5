@@ -1,6 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Sidebar from '@/components/sidebar';
+import Footer from '../footer/footer';
+import './page.css'
 
 export default function HomePage() {
   const [genreRecommendations, setGenreRecommendations] = useState<any>(null);
@@ -102,6 +105,7 @@ export default function HomePage() {
         alignItems: 'center',
         textAlign: 'center'
       }}>
+  
         <p><strong>{title}</strong></p>
         <button 
           onClick={() => {setLiked(!liked);
@@ -278,44 +282,49 @@ export default function HomePage() {
 
   return (
     <main>
-      <h1>Recomendaciones</h1>
+      <div className='main-body'>
+        <Sidebar/>
+        <div className='screen-container'>
+          <h1>Recomendaciones</h1>
 
-      <section>
-        <h2>Canciones Recomendadas por Género</h2>
-        {renderData(genreRecommendations, "songs")}
-      </section>
+          <section>
+            <h2>Canciones Recomendadas por Género</h2>
+            {renderData(genreRecommendations, "songs")}
+          </section>
 
-      <section>
-        <h2>Canciones Recomendadas por Segundo Género</h2>
-        {renderData(secondGenreRecommendations, "songs")}
-      </section>
+          <section>
+            <h2>Canciones Recomendadas por Segundo Género</h2>
+            {renderData(secondGenreRecommendations, "songs")}
+          </section>
 
-      <section>
-        <h2>Canciones Recomendadas por Artista</h2>
-        {renderData(artistRecommendations, "songs")}
-      </section>
+          <section>
+            <h2>Canciones Recomendadas por Artista</h2>
+            {renderData(artistRecommendations, "songs")}
+          </section>
 
-      <section>
-        <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
-        {renderData(artistsBySongsRecommendations, "artist")}
-      </section>
-      
-      <button 
-        onClick={() => router.push('/for-you')} // Usar router.push para redirigir a /for-you
-        style={{
-          marginTop: '2rem',
-          backgroundColor: '#0070f3',
-          color: 'white',
-          padding: '0.75rem 1.5rem',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          fontSize: '1rem'
-        }}
-      >
-        For You
-      </button>
-      
+          <section>
+            <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
+            {renderData(artistsBySongsRecommendations, "artist")}
+          </section>
+          
+          <button 
+            onClick={() => router.push('/for-you')} // Usar router.push para redirigir a /for-you
+            style={{
+              marginTop: '2rem',
+              backgroundColor: '#0070f3',
+              color: 'white',
+              padding: '0.75rem 1.5rem',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Buscar Canciones
+          </button>
+        </div>
+      </div>
+      <Footer/>
     </main>
   );
 }

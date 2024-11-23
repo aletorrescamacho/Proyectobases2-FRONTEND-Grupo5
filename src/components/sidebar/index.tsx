@@ -17,11 +17,10 @@ export default function Sidebar() {
         alt='profile pic'
       />
       <div>
-        <SidebarButton title="Feed" to="/foryou/feed" icon={<MdSpaceDashboard/>}/>
-        <SidebarButton title="Trending" to="/foryou/trending" icon={<FaGripfire/>}/>
-        <SidebarButton title="Player" to="/foryou/player" icon={<FaPlay/>}/>
-        <SidebarButton title="Favorites" to="/foryou/favorites" icon={<MdFavorite/>}/>
-        <SidebarButton title="Library" to="/foryou" icon={<IoLibrary/>}/>
+        <SidebarButton title="Feed" to="/home" icon={<MdSpaceDashboard/>}/>
+        <SidebarButton title="Search" to="/for-you" icon={<FaGripfire/>}/>
+        <SidebarButton title="Player" to="/player" icon={<FaPlay/>}/>
+        <SidebarButton title="Favorites" to="/favorites" icon={<MdFavorite/>}/>
       </div>
       <SidebarButton title="Sign Out" to="/" icon={<FaSignOutAlt/>}/>
     </div>
