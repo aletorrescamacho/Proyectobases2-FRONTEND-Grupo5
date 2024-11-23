@@ -63,10 +63,11 @@ export default function LoginPage() {
               name='email'
               placeholder='Ingresa tu correo...'
             />
-            <Form.Footer
-              description='Aun no tienes cuenta?'
-              link='/register'
-              textLink='Registrate'
+             <Form.Input
+              placeholder='Ingresa tu contraseña...'
+              label='Contraseña'
+              name='password'
+              type='password'
             />
           </div>
           <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
@@ -81,7 +82,7 @@ export default function LoginPage() {
             textLink='Registrate'
           />
         </Form>
-          <Footer/>
+        <Footer/>
     </div>
     
     </>

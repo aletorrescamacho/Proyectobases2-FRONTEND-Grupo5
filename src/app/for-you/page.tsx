@@ -98,6 +98,7 @@ export default function ForYouPage() {
         alignItems: 'center',
         textAlign: 'center',
         marginBottom: '1rem',
+        backgroundColor: 'white',
       }}>
         <p><strong>Título:</strong> {trackName}</p>
         <p><strong>Artista:</strong> {artistName}</p>
@@ -111,7 +112,7 @@ export default function ForYouPage() {
             backgroundColor: 'transparent',
             border: 'none',
             fontSize: '1.5rem',
-            color: liked ? 'black' : 'gray',
+            color: liked ? 'red' : 'gray',
             cursor: 'pointer',
           }}
         >
@@ -122,7 +123,7 @@ export default function ForYouPage() {
             registrarEscucha(trackId);
           }}
           style={{
-            backgroundColor: '#f0f0f0',
+            backgroundColor: '#E99D72',
             border: '1px solid #ccc',
             borderRadius: '4px',
             padding: '0.5rem 1rem',
@@ -242,6 +243,7 @@ export default function ForYouPage() {
         alignItems: 'center',
         textAlign: 'center',
         marginBottom: '1rem',
+        backgroundColor: 'white',
       }}>
         <p><strong>Artista:</strong> {artistName}</p>
         <button
@@ -250,7 +252,7 @@ export default function ForYouPage() {
           }
         }
           style={{
-            backgroundColor: following ? '#4CAF50' : '#f0f0f0',
+            backgroundColor: following ? '#4CAF50' : '#E99D72',
             color: following ? 'white' : 'black',
             border: '1px solid #ccc',
             borderRadius: '4px',

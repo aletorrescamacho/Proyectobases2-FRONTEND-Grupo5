@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/sidebar';
 import Footer from '../footer/footer';
-import './page.css'
+
 
 export default function HomePage() {
   const [genreRecommendations, setGenreRecommendations] = useState<any>(null);
@@ -103,7 +103,8 @@ export default function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'white'
       }}>
   
         <p><strong>{title}</strong></p>
@@ -116,7 +117,7 @@ export default function HomePage() {
             backgroundColor: 'transparent',
             border: 'none',
             fontSize: '1.5rem',
-            color: liked ? 'black' : 'gray',
+            color: liked ? 'red' : 'gray',
             cursor: 'pointer'
           }}>
           ♥
@@ -126,7 +127,7 @@ export default function HomePage() {
             registrarEscucha(track_id);
           }} 
           style={{
-            backgroundColor: '#f0f0f0',
+            backgroundColor: '#E99D72',
             border: '1px solid #ccc',
             borderRadius: '4px',
             padding: '0.5rem 1rem',
@@ -217,7 +218,8 @@ export default function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'white',
       }}>
         <p><strong>{artistName}</strong></p>
         <button 
@@ -225,7 +227,7 @@ export default function HomePage() {
             handleArtist(artist_id, following);
           }} 
           style={{
-            backgroundColor: following ? '#4CAF50' : '#f0f0f0',
+            backgroundColor: following ? '#4CAF50' : '#E99D72',
             color: following ? 'white' : 'black',
             border: '1px solid #ccc',
             borderRadius: '4px',
