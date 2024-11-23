@@ -312,11 +312,11 @@ export default function ForYouPage() {
       <div className='main-body'>
         <Sidebar/>
         <div className='screen-container' >
+            <h1>
+              Buscar Canciones y Artistas
+          </h1>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <h1>
-                Busca la canción que desees
-              </h1>
               <input
                 type="text"
                 placeholder="Busca aquí..."

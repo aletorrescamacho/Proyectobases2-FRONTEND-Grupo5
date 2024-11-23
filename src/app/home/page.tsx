@@ -285,40 +285,32 @@ export default function HomePage() {
       <div className='main-body'>
         <Sidebar/>
         <div className='screen-container'>
-          <h1>Recomendaciones</h1>
+          <h1>Escucha tu Música Favortia</h1>
+          <h2>Recomendaciones</h2>
 
           <section>
-            <h2>Canciones Recomendadas por Género</h2>
+            <h3>Canciones Recomendadas por Género</h3>
             {renderData(genreRecommendations, "songs")}
           </section>
 
           <section>
-            <h2>Canciones Recomendadas por Segundo Género</h2>
+            <h3>Canciones Recomendadas por Segundo Género</h3>
             {renderData(secondGenreRecommendations, "songs")}
           </section>
 
           <section>
-            <h2>Canciones Recomendadas por Artista</h2>
+            <h3>Canciones Recomendadas por Artista</h3>
             {renderData(artistRecommendations, "songs")}
           </section>
 
           <section>
-            <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
+            <h3>Recomendaciones de Artistas por Canciones Escuchadas</h3>
             {renderData(artistsBySongsRecommendations, "artist")}
           </section>
           
           <button 
             onClick={() => router.push('/for-you')} // Usar router.push para redirigir a /for-you
-            style={{
-              marginTop: '2rem',
-              backgroundColor: '#0070f3',
-              color: 'white',
-              padding: '0.75rem 1.5rem',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }}
+            className='center-button'
           >
             Buscar Canciones
           </button>
