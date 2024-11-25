@@ -7,7 +7,7 @@ import { createContext, useState } from 'react'
 interface IState {
   open: boolean
   status: StatusNotification
-  msj: string | null
+  msj: string | null 
 }
 
 interface INotification extends IState {
