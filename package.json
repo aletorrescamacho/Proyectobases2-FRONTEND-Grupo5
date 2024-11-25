@@ -1,8 +1,11 @@
 {
   "name": "proyectobases2-frontend-grupo5",
   "version": "0.1.0",
+  "homepage": "https://aletorrescamacho.github.io/Proyectobases2-FRONTEND-Grupo5",
   "private": true,
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -25,6 +28,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
+    "gh-pages": "^6.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
