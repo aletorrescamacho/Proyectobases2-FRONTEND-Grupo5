@@ -2,7 +2,7 @@
   "name": "proyectobases2-frontend-grupo5",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://aletorrescamacho.github.io/Proyectobases2-FRONTDEPLOY-Grupo5",
+  "homepage": "https://aletorrescamacho.github.io/Proyectobases2-FRONTEND-Grupo5",
   "scripts": {
     "predeploy":"npm run build",
     "deploy": "gh-pages -d build",
