@@ -1,7 +1,6 @@
 import React from 'react'
 import './sidebar.css'
 import SidebarButton from '../sidebarButton'
-import { MdFavorite } from 'react-icons/md'
 import { FaSearch } from 'react-icons/fa'
 import { FaSignOutAlt } from 'react-icons/fa'
 import { MdSpaceDashboard } from 'react-icons/md'

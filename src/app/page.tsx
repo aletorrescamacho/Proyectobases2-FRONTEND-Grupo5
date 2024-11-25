@@ -3,7 +3,6 @@
 
 import { Form, FormValues } from '@/components/Form'
 import { useLoading } from '@/hooks/useLoading'
-import Navbar from './navigation/navbar'
 import Footer from './footer/footer'
 import './page.css'
 
