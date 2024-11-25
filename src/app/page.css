@@ -1,0 +1,13 @@
+.main-body {
+    height: 100vh;
+    margin-top: 100px;
+    width: 100vw;
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en columna */
+    justify-content: center; /* Centra el formulario verticalmente */
+    align-items: center; /* Centra el formulario horizontalmente */
+    gap: 20px; /* Espacio entre elementos si hay más en el futuro */
+    border-radius: 30px;
+    position: relative; /* Permite posicionar elementos hijos como el Footer */
+}
+
