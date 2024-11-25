@@ -1,84 +1,97 @@
-'use client'
+'use client';
 
-import { Form, FormValues } from '@/components/Form'
-import { useLoading } from '@/hooks/useLoading'
+import { Form, FormValues } from '@/components/Form';
+import { useLoading } from '@/hooks/useLoading';
+import { useState } from 'react';
 
 export default function LoginPage() {
-  const { finishLoading, isLoading, startLoading } = useLoading()
+  const { finishLoading, isLoading, startLoading } = useLoading();
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const login = async (formData: any) => {
-    startLoading()
+    startLoading();
     try {
-      const response = await fetch('https://proyectobases2-backend-grupo5-production.up.railway.app/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
+      const response = await fetch(
+        'https://proyectobases2-backend-grupo5-production.up.railway.app/users/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Error en la solicitud de inicio de sesión')
+        throw new Error('Error en la solicitud de inicio de sesión');
       }
 
-      const data = await response.json()
+      const data = await response.json();
 
-      // Guarda el userId en localStorage si la respuesta contiene los datos esperados
       if (data.user?.userId) {
-        localStorage.setItem('userId', data.user.userId.low.toString()); // Almacena solo el valor de `low` como cadena 
+        localStorage.setItem('userId', data.user.userId.low.toString());
       }
 
-      // Redirige a /home si el inicio de sesión es exitoso
-      window.location.href = '/home'
+      window.location.href = '/home';
     } catch (error) {
-      console.error('Error en el Inicio de Sesión', error)
+      console.error('Error en el Inicio de Sesión', error);
     } finally {
-      finishLoading()
+      finishLoading();
     }
-  }
+  };
 
   const handleSubmit = (values: FormValues) => {
-    const formData = {
-      email: values.email,
-      password: values.password,
+    const newErrors: { email?: string; password?: string } = {};
+
+    if (!values.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+      newErrors.email = 'Por favor, ingresa un correo válido.';
     }
-    login(formData)
-  }
+
+    if (!values.password || values.password.length < 8) {
+      newErrors.password = 'La contraseña debe tener al menos 8 caracteres.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+    login(values);
+  };
 
   return (
-    <>
-      <Form
-        title='Inicia Sesión'
-        onSubmit={handleSubmit}
-        description='Formulario para iniciar sesión'
-      >
-        <div className='my-[10px] flex flex-col gap-4'>
-          <Form.Input
-            label='Correo'
-            name='email'
-            placeholder='Ingresa tu correo...'
-          />
-          <Form.Input
-            placeholder='Ingresa tu contraseña...'
-            label='Contraseña'
-            name='password'
-            type='password'
-          />
-        </div>
-        <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
-        <Form.Footer
-          description='Olvidaste tu contraseña?'
-          link='/forget-password'
-          textLink='Recuperar contraseña'
+    <Form
+      title="Inicia Sesión"
+      onSubmit={handleSubmit}
+      description="Formulario para iniciar sesión"
+    >
+      <div className="my-[10px] flex flex-col gap-4">
+        <Form.Input
+          label="Correo"
+          name="email"
+          placeholder="Ingresa tu correo..."
+          error={errors.email}
         />
-        <Form.Footer
-          description='Aun no tienes cuenta?'
-          link='/register'
-          textLink='Registrate'
+        <Form.Input
+          placeholder="Ingresa tu contraseña..."
+          label="Contraseña"
+          name="password"
+          type="password"
+          error={errors.password}
         />
-      </Form>
-    </>
-  )
+      </div>
+      <Form.SubmitButton buttonText="Iniciar Sesión" isLoading={isLoading} />
+      <Form.Footer
+        description="Olvidaste tu contraseña?"
+        link="/forget-password"
+        textLink="Recuperar contraseña"
+      />
+      <Form.Footer
+        description="Aun no tienes cuenta?"
+        link="/register"
+        textLink="Registrate"
+      />
+    </Form>
+  );
 }
-
-  

@@ -1,26 +1,27 @@
-'use client'
+'use client';
 
-import { useContext } from 'react'
-import { FormContext } from '..'
-import styles from './styles.module.scss'
+import { useContext } from 'react';
+import { FormContext } from '..';
+import styles from './styles.module.scss';
 
 interface InputProps {
-  type?: 'text' | 'password'
-  name: string
-  label: string
-  placeholder?: string
+  type?: 'text' | 'password';
+  name: string;
+  label: string;
+  placeholder?: string;
+  error?: string; // Manejar errores
 }
 
-export function Input ({ label, name, placeholder, type }: InputProps) {
-  const { formValues, setFormValues } = useContext(FormContext)!
+export function Input({ label, name, placeholder, type = 'text', error }: InputProps) {
+  const { formValues, setFormValues } = useContext(FormContext)!;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    setFormValues(prevValues => ({
+    const { value } = event.target;
+    setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   return (
     <div className={styles.inputContainer}>
@@ -34,7 +35,9 @@ export function Input ({ label, name, placeholder, type }: InputProps) {
         value={formValues[name] || ''}
         onChange={handleChange}
         placeholder={placeholder}
+        className={`${styles.input} ${error ? styles.inputError : ''}`} // Aplica clase si hay error
       />
+      {error && <p className={styles.errorMessage}>{error}</p>} {/* Mostrar mensaje de error */}
     </div>
-  )
+  );
 }

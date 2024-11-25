@@ -1,32 +1,32 @@
-'use client'
+'use client';
 
-import { Footer, Input, SubmitButton } from '@/components/Form/components'
-import { createContext, useState } from 'react'
-import styles from './styles.module.scss'
+import { Footer, Input, SubmitButton } from '@/components/Form/components';
+import { createContext, useState } from 'react';
+import styles from './styles.module.scss';
 
-export type FormValues = Record<string, string>
+export type FormValues = Record<string, string>;
 
 interface FormContextType {
-  formValues: FormValues
-  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>
+  formValues: FormValues;
+  setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
 }
 
 interface FormProps {
-  title: string
-  description?: string
-  onSubmit: (values: FormValues) => void
-  children: React.ReactNode
+  title: string;
+  description?: string;
+  onSubmit: (values: FormValues) => void;
+  children: React.ReactNode;
 }
 
-export const FormContext = createContext<FormContextType | undefined>(undefined)
+export const FormContext = createContext<FormContextType | undefined>(undefined);
 
-export function Form ({ title, children, onSubmit, description }: FormProps) {
-  const [formValues, setFormValues] = useState<FormValues>({})
+export function Form({ title, children, onSubmit, description }: FormProps) {
+  const [formValues, setFormValues] = useState<FormValues>({});
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
-    onSubmit(formValues)
-  }
+    event.preventDefault();
+    onSubmit(formValues);
+  };
 
   return (
     <FormContext.Provider value={{ formValues, setFormValues }}>
@@ -38,9 +38,9 @@ export function Form ({ title, children, onSubmit, description }: FormProps) {
         {children}
       </form>
     </FormContext.Provider>
-  )
+  );
 }
 
-Form.Input = Input
-Form.Footer = Footer
-Form.SubmitButton = SubmitButton
+Form.Input = Input;
+Form.Footer = Footer;
+Form.SubmitButton = SubmitButton;
