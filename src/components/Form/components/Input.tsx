@@ -1,25 +1,39 @@
 'use client'
 
-import { useContext } from 'react'
 import { FormContext } from '..'
 import styles from './styles.module.scss'
+import { useContext, useState } from 'react'
 
 interface InputProps {
   type?: 'text' | 'password'
   name: string
   label: string
   placeholder?: string
+  validate?: (value: string) => string | null // Función de validación opcional
 }
 
-export function Input ({ label, name, placeholder, type }: InputProps) {
-  const { formValues, setFormValues } = useContext(FormContext)!
+export function Input({ label, name, placeholder, type = 'text', validate }: InputProps) {
+  const formContext = useContext(FormContext)
+  if (!formContext) {
+    throw new Error('Input must be used within a FormContext.Provider')
+  }
+
+  const { formValues, setFormValues } = formContext
+  const [error, setError] = useState<string | null>(null)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
-    setFormValues(prevValues => ({
+
+    setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value
+      [name]: value,
     }))
+
+    if (validate) {
+      setError(validate(value))
+    } else {
+      setError(null)
+    }
   }
 
   return (
@@ -35,6 +49,7 @@ export function Input ({ label, name, placeholder, type }: InputProps) {
         onChange={handleChange}
         placeholder={placeholder}
       />
+      {error && <p className={styles.error}>{error}</p>}
     </div>
   )
 }

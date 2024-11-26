@@ -18,9 +18,13 @@ interface FormProps {
   children: React.ReactNode
 }
 
-export const FormContext = createContext<FormContextType | undefined>(undefined)
+// Inicializa el contexto con un valor vacío en lugar de `undefined`
+export const FormContext = createContext<FormContextType>({
+  formValues: {},
+  setFormValues: () => {},
+})
 
-export function Form ({ title, children, onSubmit, description }: FormProps) {
+export function Form({ title, children, onSubmit, description }: FormProps) {
   const [formValues, setFormValues] = useState<FormValues>({})
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -41,6 +45,7 @@ export function Form ({ title, children, onSubmit, description }: FormProps) {
   )
 }
 
+// Exporta subcomponentes
 Form.Input = Input
 Form.Footer = Footer
 Form.SubmitButton = SubmitButton
