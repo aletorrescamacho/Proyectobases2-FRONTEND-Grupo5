@@ -94,11 +94,7 @@ export default function LoginPage() {
             />
           </div>
           <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
-          <Form.Footer
-            description='Olvidaste tu contraseña?'
-            link='/forget-password'
-            textLink='Recuperar contraseña'
-          />
+          
           <Form.Footer
             description='Aun no tienes cuenta?'
             link='/register'
