@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
         <div className="w-full h-[1px] bg-orange-300 mt-4 mb-6"></div>
 
         <p className="text-sm">
-          Integrantes: <strong>Paula Briceño</strong>, <strong>Camila Fermoso</strong>, <strong>Camila García</strong> <strong>Cristian Gouveia</strong>, <strong>Andrés Imery</strong>, <strong>Mauricio Méndez</strong>, <strong>Luis Soriano</strong> y <strong>Alessandra Torres</strong>.
+          Integrantes: <strong>Paula Briceño</strong>, <strong>Camila Fermoso</strong>, <strong>Camila García</strong>, <strong>Cristian Gouveia</strong>, <strong>Andrés Imery</strong>, <strong>Mauricio Méndez</strong>, <strong>Luis Soriano</strong> y <strong>Alessandra Torres</strong>.
         </p>
 
         <div className="flex space-x-6 mt-2">

@@ -41,12 +41,27 @@ export default function LoginPage() {
   }
 
   const handleSubmit = (values: FormValues) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordMinLength = 8;
+  
+    if (!emailRegex.test(values.email)) {
+      alert('Por favor ingresa un correo válido.');
+      return;
+    }
+  
+    if (values.password.length < passwordMinLength) {
+      alert(`La contraseña debe tener al menos ${passwordMinLength} caracteres.`);
+      return;
+    }
+  
     const formData = {
       email: values.email,
       password: values.password,
-    }
-    login(formData)
-  }
+    };
+  
+    login(formData);
+  };
+  
 
   return (
     <>
@@ -61,12 +76,21 @@ export default function LoginPage() {
               label='Correo'
               name='email'
               placeholder='Ingresa tu correo...'
+              validate={(value) =>
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                  ? null
+                  : 'Correo no válido'
+              }
             />
              <Form.Input
               placeholder='Ingresa tu contraseña...'
               label='Contraseña'
               name='password'
               type='password'
+              validate={(value) =>
+                value.length >= 8
+                  ? null
+                  : 'La contraseña debe tener al menos 8 caracteres'}
             />
           </div>
           <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
