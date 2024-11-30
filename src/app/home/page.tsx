@@ -1,6 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Sidebar from '@/components/sidebar';
+import Footer from '../footer/footer';
+
 
 export default function HomePage() {
   const [genreRecommendations, setGenreRecommendations] = useState<any>(null);
@@ -100,8 +103,10 @@ export default function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'white'
       }}>
+  
         <p><strong>{title}</strong></p>
         <button 
           onClick={() => {setLiked(!liked);
@@ -112,7 +117,7 @@ export default function HomePage() {
             backgroundColor: 'transparent',
             border: 'none',
             fontSize: '1.5rem',
-            color: liked ? 'black' : 'gray',
+            color: liked ? 'red' : 'gray',
             cursor: 'pointer'
           }}>
           ♥
@@ -122,7 +127,7 @@ export default function HomePage() {
             registrarEscucha(track_id);
           }} 
           style={{
-            backgroundColor: '#f0f0f0',
+            backgroundColor: '#E99D72',
             border: '1px solid #ccc',
             borderRadius: '4px',
             padding: '0.5rem 1rem',
@@ -213,7 +218,8 @@ export default function HomePage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: 'white',
       }}>
         <p><strong>{artistName}</strong></p>
         <button 
@@ -221,7 +227,7 @@ export default function HomePage() {
             handleArtist(artist_id, following);
           }} 
           style={{
-            backgroundColor: following ? '#4CAF50' : '#f0f0f0',
+            backgroundColor: following ? '#4CAF50' : '#E99D72',
             color: following ? 'white' : 'black',
             border: '1px solid #ccc',
             borderRadius: '4px',
@@ -278,44 +284,41 @@ export default function HomePage() {
 
   return (
     <main>
-      <h1>Recomendaciones</h1>
+      <div className='main-body'>
+        <Sidebar/>
+        <div className='screen-container'>
+          <h1>Escucha tu Música Favortia</h1>
+          <h2>Recomendaciones</h2>
 
-      <section>
-        <h2>Canciones Recomendadas por Género</h2>
-        {renderData(genreRecommendations, "songs")}
-      </section>
+          <section>
+            <h3>Canciones Recomendadas por Género</h3>
+            {renderData(genreRecommendations, "songs")}
+          </section>
 
-      <section>
-        <h2>Canciones Recomendadas por Segundo Género</h2>
-        {renderData(secondGenreRecommendations, "songs")}
-      </section>
+          <section>
+            <h3>Canciones Recomendadas por Segundo Género</h3>
+            {renderData(secondGenreRecommendations, "songs")}
+          </section>
 
-      <section>
-        <h2>Canciones Recomendadas por Artista</h2>
-        {renderData(artistRecommendations, "songs")}
-      </section>
+          <section>
+            <h3>Canciones Recomendadas por Artista</h3>
+            {renderData(artistRecommendations, "songs")}
+          </section>
 
-      <section>
-        <h2>Recomendaciones de Artistas por Canciones Escuchadas</h2>
-        {renderData(artistsBySongsRecommendations, "artist")}
-      </section>
-      
-      <button 
-        onClick={() => router.push('/for-you')} // Usar router.push para redirigir a /for-you
-        style={{
-          marginTop: '2rem',
-          backgroundColor: '#0070f3',
-          color: 'white',
-          padding: '0.75rem 1.5rem',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          fontSize: '1rem'
-        }}
-      >
-        For You
-      </button>
-      
+          <section>
+            <h3>Recomendaciones de Artistas por Canciones Escuchadas</h3>
+            {renderData(artistsBySongsRecommendations, "artist")}
+          </section>
+          
+          <button 
+            onClick={() => router.push('/for-you')} // Usar router.push para redirigir a /for-you
+            className='center-button'
+          >
+            Buscar Canciones
+          </button>
+        </div>
+      </div>
+      <Footer/>
     </main>
   );
 }

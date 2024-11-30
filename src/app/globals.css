@@ -14,17 +14,86 @@
 
 
 body{
-    margin:0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    box-sizing: border-box;
-    background-color: black;
+  margin:0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  background-color: #E99D72;
+  display: flex;
+  flex-direction: column; /* Configura el layout vertical principal */
+  min-height: 100vh; /* Altura mínima de la pantalla */
 }
 
+.main-body{
+  height:auto;
+  width: 100vw;
+  background-color: #E99D72;
+  display: flex;
+  flex-direction: row; 
+  gap: 20px; 
+  flex: 1;
+}
+
+
 .screen-container{
-  width: calc(100% - 100px);
-  height: 100%;
+  /*width: calc(100% - 100px);
+  min-height: calc(100vh - 50px);*/
   background-color: #1E2A3E;
   border-radius: 30px;
+  padding: 20px; /* Añade un poco de espacio interno */
+  display: flex;
+  flex-direction: column; /* Asegura que los elementos internos se coloquen en una columna */
+  flex: 1;
+  min-height: 0;
+  
 }
+
+
+.screen-container h1{
+  color:white;
+  text-align:center;
+  font-size: 60px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.screen-container h2{
+  color:white;
+  text-align:left;
+  font-size: 30px;
+  font-weight: normal;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.screen-container h3{
+  color:white;
+  text-align:left;
+  font-size: 20px;
+  font-weight: lighter;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.screen-container section{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.center-button {
+  display: block; /* Asegura que el botón se trate como un elemento de bloque */
+  margin: 2rem auto; /* Margen superior e inferior de 2rem y centrado horizontalmente */
+  background-color: #E99D72;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-align: center; /* Asegura que el texto del botón esté centrado */
+}
+

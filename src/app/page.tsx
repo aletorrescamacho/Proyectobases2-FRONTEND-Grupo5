@@ -5,6 +5,7 @@ import { Form, FormValues } from '@/components/Form'
 import { useLoading } from '@/hooks/useLoading'
 import Navbar from './navigation/navbar'
 import Footer from './footer/footer'
+import './page.css'
 
 export default function LoginPage() {
   const { finishLoading, isLoading, startLoading } = useLoading()
@@ -50,35 +51,40 @@ export default function LoginPage() {
 
   return (
     <>
+    <div className='main-body'>
       <Form
-        title='Inicia Sesión'
-        onSubmit={handleSubmit}
-        description='Formulario para iniciar sesión'
-      >
-        <div className='my-[10px] flex flex-col gap-4'>
-          <Form.Input
-            label='Correo'
-            name='email'
-            placeholder='Ingresa tu correo...'
+          title='Inicia Sesión'
+          onSubmit={handleSubmit}
+          description='Formulario para iniciar sesión'
+        >
+          <div className='my-[10px] flex flex-col gap-4'>
+            <Form.Input
+              label='Correo'
+              name='email'
+              placeholder='Ingresa tu correo...'
+            />
+             <Form.Input
+              placeholder='Ingresa tu contraseña...'
+              label='Contraseña'
+              name='password'
+              type='password'
+            />
+          </div>
+          <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
+          <Form.Footer
+            description='Olvidaste tu contraseña?'
+            link='/forget-password'
+            textLink='Recuperar contraseña'
           />
           <Form.Footer
             description='Aun no tienes cuenta?'
             link='/register'
             textLink='Registrate'
           />
-        </div>
-        <Form.SubmitButton buttonText='Iniciar Sesión' isLoading={isLoading} />
-        <Form.Footer
-          description='Olvidaste tu contraseña?'
-          link='/forget-password'
-          textLink='Recuperar contraseña'
-        />
-        <Form.Footer
-          description='Aun no tienes cuenta?'
-          link='/register'
-          textLink='Registrate'
-        />
-      </Form>
+        </Form>
+        <Footer/>
+    </div>
+    
     </>
   )
 }

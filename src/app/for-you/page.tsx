@@ -1,5 +1,7 @@
 'use client';
+import Sidebar from '@/components/sidebar';
 import { useState,useEffect } from 'react';
+import Footer from '../footer/footer';
 
 
 interface SongResult {
@@ -96,6 +98,7 @@ export default function ForYouPage() {
         alignItems: 'center',
         textAlign: 'center',
         marginBottom: '1rem',
+        backgroundColor: 'white',
       }}>
         <p><strong>Título:</strong> {trackName}</p>
         <p><strong>Artista:</strong> {artistName}</p>
@@ -109,7 +112,7 @@ export default function ForYouPage() {
             backgroundColor: 'transparent',
             border: 'none',
             fontSize: '1.5rem',
-            color: liked ? 'black' : 'gray',
+            color: liked ? 'red' : 'gray',
             cursor: 'pointer',
           }}
         >
@@ -120,7 +123,7 @@ export default function ForYouPage() {
             registrarEscucha(trackId);
           }}
           style={{
-            backgroundColor: '#f0f0f0',
+            backgroundColor: '#E99D72',
             border: '1px solid #ccc',
             borderRadius: '4px',
             padding: '0.5rem 1rem',
@@ -240,6 +243,7 @@ export default function ForYouPage() {
         alignItems: 'center',
         textAlign: 'center',
         marginBottom: '1rem',
+        backgroundColor: 'white',
       }}>
         <p><strong>Artista:</strong> {artistName}</p>
         <button
@@ -248,7 +252,7 @@ export default function ForYouPage() {
           }
         }
           style={{
-            backgroundColor: following ? '#4CAF50' : '#f0f0f0',
+            backgroundColor: following ? '#4CAF50' : '#E99D72',
             color: following ? 'white' : 'black',
             border: '1px solid #ccc',
             borderRadius: '4px',
@@ -306,80 +310,92 @@ export default function ForYouPage() {
     }
 
   return (
-    <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-        <input
-          type="text"
-          placeholder="Busca aquí..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            outline: 'none',
-            backgroundColor: '#f0f0f0',
-            width: '200px',
-          }}
-        />
-
-        <select
-          value={searchType}
-          onChange={(e) => setSearchType(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor: '#f0f0f0',
-          }}
-        >
-          <option value="Canción">Canción</option>
-          <option value="Artista">Artista</option>
-        </select>
-
-        <button
-          onClick={handleSearch}
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '1.5rem',
-            color: 'black',
-          }}
-        >
-          🔍
-        </button>
-      </div>
-
-      {results && (
-        <div style={{
-          marginTop: '1rem',
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '1rem',
-        }}>
-          {displayType === 'Canción' ? (
-            (results as SongResult[]).map((item: SongResult, index: number) => (
-              <SongCard
-                key={index}
-                trackName={item.trackName}
-                artistName={item.artistName}
-                genreName={item.genreName}
-                trackId={item.trackId}
+    <main >
+      <div className='main-body'>
+        <Sidebar/>
+        <div className='screen-container' >
+            <h1>
+              Buscar Canciones y Artistas
+          </h1>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+              <input
+                type="text"
+                placeholder="Busca aquí..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  padding: '0.5rem',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  outline: 'none',
+                  backgroundColor: '#f0f0f0',
+                  width: '200px',
+                }}
               />
-            ))
-          ) : (
-            (results as ArtistResult[]).map((item: ArtistResult, index: number) => (
-              <ArtistCard
-                key={index}
-                artistName={item.artists} // Usa "artists" para el nombre del artista
-                artistId={item.artist_id?.low ?? item.artist_id}
-              />
-            ))
-          )}
+
+              <select
+                value={searchType}
+                onChange={(e) => setSearchType(e.target.value)}
+                style={{
+                  padding: '0.5rem',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  backgroundColor: '#f0f0f0',
+                }}
+              >
+                <option value="Canción">Canción</option>
+                <option value="Artista">Artista</option>
+              </select>
+
+              <button
+                onClick={handleSearch}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '1.5rem',
+                  color: 'black',
+                }}
+              >
+                🔍
+              </button>
+            </div>
+
+            {results && (
+              <div style={{
+                marginTop: '1rem',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: '1rem',
+              }}>
+                {displayType === 'Canción' ? (
+                  (results as SongResult[]).map((item: SongResult, index: number) => (
+                    <SongCard
+                      key={index}
+                      trackName={item.trackName}
+                      artistName={item.artistName}
+                      genreName={item.genreName}
+                      trackId={item.trackId}
+                    />
+                  ))
+                ) : (
+                  (results as ArtistResult[]).map((item: ArtistResult, index: number) => (
+                    <ArtistCard
+                      key={index}
+                      artistName={item.artists} // Usa "artists" para el nombre del artista
+                      artistId={item.artist_id?.low ?? item.artist_id}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      )}
+
+      </div>
+      <Footer/>
     </main>
   );
 }
